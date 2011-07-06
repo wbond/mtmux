@@ -1,0 +1,13 @@
+#!/bin/bash
+tmux new-session -d -s main "ssh $1"
+shift
+for i in $@
+do
+  tmux split-window "ssh $i"
+  tmux select-layout tiled
+done
+tmux set-option -g prefix C-a
+tmux bind-key m set-window-option synchronize-panes
+tmux set-window-option synchronize-panes on
+tmux select-pane -t 0
+tmux attach -t main

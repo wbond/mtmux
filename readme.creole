@@ -1,0 +1,10 @@
+= mtmux: multi-server SSH via tmux =
+
+mtmux uses the [http://tmux.sourceforge.net/ tmux terminal multiplexer] to
+create a tiled interface with SSH connections to multiple server with input
+being sent to all servers. It is useful for administering a handful of servers
+in an interactive fashion.
+
+== Usage ==
+
+mtmux user@host user@host2 user@host3
