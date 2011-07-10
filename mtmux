@@ -1,13 +1,22 @@
 #!/bin/bash
-tmux new-session -d -s main "ssh $1"
+
+if [[ -e ~/.mtmux/$1 ]]; then
+	SERVERS=$(cat ~/.mtmux/$1)
+	SESSION_NAME=$1
+else
+	SERVERS="$@"
+	SESSION_NAME=mtmux
+fi
+
+tmux new-session -d -s $SESSION_NAME
 shift
-for i in $@
-do
-  tmux split-window "ssh $i"
+for SERVER in $SERVERS; do
+  tmux split-window "ssh $SERVER"
   tmux select-layout tiled
 done
-tmux set-option -g prefix C-a
+tmux kill-pane -t 0
+tmux select-pane -t 0
+tmux select-layout tiled
 tmux bind-key m set-window-option synchronize-panes
 tmux set-window-option synchronize-panes on
-tmux select-pane -t 0
-tmux attach -t main
+tmux attach -t $SESSION_NAME

@@ -1,10 +1,35 @@
 = mtmux: multi-server SSH via tmux =
 
-mtmux uses the [http://tmux.sourceforge.net/ tmux terminal multiplexer] to
+mtmux uses the [[http://tmux.sourceforge.net/|tmux terminal multiplexer]] to
 create a tiled interface with SSH connections to multiple server with input
 being sent to all servers. It is useful for administering a handful of servers
 in an interactive fashion.
 
+tmux must be installed for this script to function.
+
 == Usage ==
 
+For basic usage, simply pass any number of user@host specifications.
+
 mtmux user@host user@host2 user@host3
+
+=== Saved Groups ===
+
+It is also possible to save groups of servers in files in your ~/.mtmux
+directory. Added one user@host per line and call the group by passing the
+name of the file to mtmux.
+
+For example, ~/.mtmux/my_servers could contain:
+
+will@example.com
+will@dev.example.com
+
+To connect to all servers, simply call:
+
+mtmux my_servers
+
+=== De-synchronizing Input ===
+
+To switch between synchronized and unsynchronized input, press {{{(prefix) m}}}.
+Normal tmux shortcuts can be used to navigate between panes when using
+unsynchronized input, {{{(prefix) (arrow keys)}}}.
