@@ -2,21 +2,24 @@
 
 if [[ -e ~/.mtmux/$1 ]]; then
 	SERVERS=$(cat ~/.mtmux/$1)
-	SESSION_NAME=$1
+	SESSION_NAME=mtmux_$1
 else
 	SERVERS="$@"
 	SESSION_NAME=mtmux
 fi
 
+if tmux list-sessions | grep -q $SESSION_NAME; then
+	SESSION_NAME=${SESSION_NAME}_$RANDOM
+fi
+
 tmux new-session -d -s $SESSION_NAME
-shift
 for SERVER in $SERVERS; do
-  tmux split-window "ssh $SERVER"
-  tmux select-layout tiled
+  tmux split-window -t $SESSION_NAME "ssh $SERVER"
+  tmux select-layout -t $SESSION_NAME tiled
 done
-tmux kill-pane -t 0
-tmux select-pane -t 0
-tmux select-layout tiled
+tmux kill-pane -t $SESSION_NAME.0
+tmux select-pane -t $SESSION_NAME.0
+tmux select-layout -t $SESSION_NAME tiled
 tmux bind-key m set-window-option synchronize-panes
-tmux set-window-option synchronize-panes on
+tmux set-window-option -t $SESSION_NAME synchronize-panes on
 tmux attach -t $SESSION_NAME
