@@ -1,11 +1,12 @@
 #!/bin/bash
 
+
 if [[ -e ~/.mtmux/$1 ]]; then
-	SERVERS=$(cat ~/.mtmux/$1)
-	SESSION_NAME=$1
+  SERVERS=$(cat ~/.mtmux/$1)
+  SESSION_NAME=$1
 else
-	SERVERS="$@"
-	SESSION_NAME=mtmux
+  SERVERS="$@"
+  SESSION_NAME=mtmux-$(echo "$@" | shasum - | awk '{print $1}')
 fi
 
 tmux new-session -d -s $SESSION_NAME
