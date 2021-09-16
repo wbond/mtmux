@@ -12,7 +12,7 @@ fi
 tmux new-session -d -s $SESSION_NAME
 shift
 for SERVER in $SERVERS; do
-  tmux split-window "ssh $SERVER"
+  tmux split-window "${SSH_CMD:-ssh} $SERVER"
   tmux select-layout tiled
 done
 tmux kill-pane -t 0
