@@ -2,18 +2,18 @@
 
 
 if [[ -e ~/.mtmux/$1 ]]; then
-  SERVERS=$(cat ~/.mtmux/$1)
-  SESSION_NAME=$1
+    SERVERS=$(cat ~/.mtmux/$1)
+    SESSION_NAME=$1
 else
-  SERVERS="$@"
-  SESSION_NAME=mtmux-$(echo "$@" | shasum - | awk '{print $1}')
+    SERVERS="$@"
+    SESSION_NAME=mtmux-$(echo "$@" | shasum - | awk '{print $1}')
 fi
 
 tmux new-session -d -s $SESSION_NAME
 shift
 for SERVER in $SERVERS; do
-  tmux split-window "${SSH_CMD:-ssh} $SERVER"
-  tmux select-layout tiled
+    tmux split-window "${SSH_CMD:-ssh} $SERVER"
+    tmux select-layout tiled
 done
 tmux kill-pane -t 0
 tmux select-pane -t 0
