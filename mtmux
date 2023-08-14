@@ -9,6 +9,14 @@ else
     SESSION_NAME=mtmux-$(echo "$@" | shasum - | awk '{print $1}')
 fi
 
+I=0
+SUFFIX=""
+while tmux has-session -t "${SESSION_NAME}${SUFFIX}" 2>/dev/null; do
+	I=`expr $I + 1`
+	SUFFIX="-$I"
+done
+SESSION_NAME="${SESSION_NAME}${SUFFIX}"
+
 tmux new-session -d -s $SESSION_NAME
 shift
 for SERVER in $SERVERS; do
